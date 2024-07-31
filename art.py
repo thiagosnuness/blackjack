@@ -1,4 +1,10 @@
-"""BlackJack logo"""
+"""
+art.py
+
+This module contains the ASCII art used in the Blackjack game,
+including the game logo.
+"""
+
 
 logo = """
 .------.            _     _            _    _            _    

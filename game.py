@@ -1,77 +1,103 @@
-"""The BlackJack Game module"""
+"""
+game.py
+
+This module defines the Game class, which represents a game of Blackjack.
+The Game class manages the overall game logic, including dealing cards,
+calculating scores, and determining the winner.
+"""
 
 from replit import clear
 
-from art import logo
+from player import Player
 from deck import Deck
+from art import logo
 
 
-class Game(Deck):
-    """The BlackJack Game"""
+class Game:
+    """
+    Represents a game of Blackjack.
+
+    Attributes:
+        __deck (Deck): The deck of cards used in the game.
+        __player1 (Player): The first player in the game.
+        __player2 (Player): The second player in the game.
+    """
+
     def __init__(self, player1="user", player2="computer"):
-        """Initialize attributes to describe a game."""
-        super().__init__(player1, player2)
-        self.__game_card = self.players_card()
-        self.__cards_player1 = self.__game_card[self.name_player1()]
-        self.__cards_player2 = self.__game_card[self.name_player2()]
-        self.__final_player1 = self.calculate_score(self.__cards_player1)
-        self.__final_player2 = self.calculate_score(self.__cards_player2)
-
-    def calculate_score(self, cards):
         """
-        Calculate the score for the given cards, handling Aces as 1 or 11.
+        Initialize the game with two players and a deck.
+
+        Args:
+            player1 (str): The name of player 1. Default is "user".
+            player2 (str): The name of player 2. Default is "computer".
         """
-        score = sum(cards)
-        if 11 in cards and score > 21:
-            score -= 10  # Adjust for Ace
-        return score
+        self.__deck = Deck()
+        self.__player1 = Player(player1)
+        self.__player2 = Player(player2)
 
-    def score(self):
-        """Return the score"""
-        print(
-            f"\n\tYour cards: {self.__cards_player1}, "
-            f"current score: {self.__final_player1}"
-        )
-        print(
-            f"\tComputer's cards: {self.__cards_player2}, "
-            f"current score: {self.__final_player2}"
-        )
+    def deal_initial_cards(self):
+        """Deal two initial cards to each player."""
+        for _ in range(2):
+            self.__player1.add_card(self.__deck.draw_card())
+            self.__player2.add_card(self.__deck.draw_card())
 
-    def winner(self):
-        """Return Blackjack winning player"""
-        if self.__final_player1 > 21:
+    def play(self):
+        """
+        Start and play the game.
+
+        Clears the screen, displays the game logo, deals initial cards,
+        and manages the game loop where players draw cards and the
+        winner is determined.
+        """
+        clear()
+        print(logo)
+        self.deal_initial_cards()
+        self.show_scores()
+        while self.__player1.get_score() < 21:
+            user_input = input(
+                "\nType 'y' to get another card, 'n' to pass: ").lower()
+            while user_input not in ('y', 'n'):
+                print("\nInvalid input. Please enter 'y' or 'n'.")
+                user_input = input(
+                    "\nType 'y' to get another card, 'n' to pass: ").lower()
+            if user_input == 'y':
+                self.__player1.add_card(self.__deck.draw_card())
+                self.show_scores()
+            elif user_input == 'n':
+                break
+        if self.__player1.get_score() <= 21:
+            while self.__player2.get_score() < 17:
+                self.__player2.add_card(self.__deck.draw_card())
+        if self.__player1.get_score() > 21 or self.__player1.get_score() == 21:
+            self.determine_winner()
+            return
+        self.show_scores()
+        self.determine_winner()
+
+    def show_scores(self):
+        """Display the current scores and cards of both players."""
+        print(
+            f"\nYour cards: {self.__player1.get_cards()}, "
+            f"current score: {self.__player1.get_score()}"
+            )
+        print(f"Computer's cards: {self.__player2.get_cards()}, "
+              f"current score: {self.__player2.get_score()}"
+              )
+
+    def determine_winner(self):
+        """
+        Determine and display the winner of the game based on
+        the current scores.
+        """
+        player_score = self.__player1.get_score()
+        computer_score = self.__player2.get_score()
+        if player_score > 21:
             print("\nYou went over. You lose 😭")
-        elif self.__final_player2 > 21:
+        elif computer_score > 21:
             print("\nOpponent went over. You win 😁")
-        elif self.__final_player1 > self.__final_player2:
+        elif player_score > computer_score:
             print("\nYou win 😁")
-        elif self.__final_player2 > self.__final_player1:
+        elif computer_score > player_score:
             print("\nYou lose 😭")
         else:
             print("\nDraw 🙃")
-
-    def play(self):
-        """Play BlackJack"""
-        clear()
-        print(logo)
-        self.score()
-        another_card = input(
-            "\nType 'y' to get another card, type 'n' to pass: "
-        )
-        while another_card == "y":
-            self.__cards_player1.append(self.choose_card())
-            self.__final_player1 = self.calculate_score(self.__cards_player1)
-            if self.__final_player1 > 21:
-                break
-            self.score()
-            another_card = input(
-                "\nType 'y' to get another card, type 'n' to pass: "
-            )
-        else:
-            while self.__final_player2 < 17:
-                self.__cards_player2.append(self.choose_card())
-                self.__final_player2 = self.calculate_score(
-                    self.__cards_player2
-                )
-        self.score()
-        self.winner()

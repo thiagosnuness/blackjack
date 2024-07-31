@@ -6,7 +6,8 @@ Blackjack is a classic casino game, and this project is an implementation of the
 
 The project is organized into several files:
 
-- **`deck.py`**: Defines the `Player` and `Deck` classes, which represent the players and the deck of cards.
+- **`player.py`**: Defines the `Player` class, which manages player information and tracks the cards dealt to each player.
+- **`deck.py`**: Defines the `Deck` class, which represents the deck of cards and handles card dealing.
 - **`game.py`**: Contains the `Game` class with the main logic for the Blackjack game.
 - **`main.py`**: The entry point that initializes and runs the game.
 - **`art.py`**: Contains the game's logo and other ASCII art.
@@ -34,29 +35,34 @@ The project is organized into several files:
 
 ## Code Overview
 
+### `player.py`
+
+This file contains the `Player` class:
+
+- **`Player`**: Manages player information, including player names and the cards dealt to each player. Provides methods to retrieve player names and update the list of cards held by each player. Also includes methods to calculate the score of the player's hand.
+
 ### `deck.py`
 
-This file contains the `Player` and `Deck` classes:
+This file contains the `Deck` class:
 
-- **`Player`**: Manages player information and names.
-- **`Deck`**: Manages the deck of cards and card dealing.
+- **`Deck`**: Represents a deck of cards. Manages card values and the dealing of cards. Provides methods to draw cards from the deck and deal them to players.
 
 ### `game.py`
 
-This file defines the `Game` class, which manages the game flow, including:
+This file defines the `Game` class, which handles the main logic of the Blackjack game:
 
-- Dealing cards to players
-- Calculating scores
-- Determining the winner
-- Handling user inputs
+- Deals initial cards to players
+- Calculates and updates scores based on cards drawn
+- Determines the winner based on the scores
+- Manages user inputs for drawing additional cards or passing
 
 ### `main.py`
 
-This script is the entry point for the game. It runs the game and handles user interactions.
+This script is the entry point for the game. It initializes and runs the game loop, allowing the user to play multiple rounds of Blackjack until they choose to exit.
 
 ### `art.py`
 
-Contains ASCII art for the Blackjack logo.
+Contains ASCII art for the Blackjack logo and any other graphical elements used in the game.
 
 ## Contributing
 
