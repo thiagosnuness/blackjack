@@ -1,7 +1,9 @@
 """
-Main script to run the Blackjack game.
+main.py
 
-This script initializes the game and manages the game loop.
+Entry point for the Blackjack game.
+
+This module initializes the game and manages the game loop.
 It prompts the user to play a game of Blackjack and continues
 to run until the user decides to quit.
 """
