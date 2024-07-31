@@ -7,6 +7,7 @@ from game import Game
 
 
 def main():
+    """Run the BlackJack game"""
     clear()
     print(logo)
     play = input(
